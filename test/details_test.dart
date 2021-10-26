@@ -43,4 +43,36 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text("Success!"), findsOneWidget);
   });
+
+  testWidgets('It buy an item with error', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ProviderScope(
+          child: GraphQLMutationMocker(
+            mockedResult: BuyMock.responseWithError,
+            child: Navigator(
+              onGenerateRoute: (_) {
+                return MaterialPageRoute<Widget>(
+                  builder: (_) => DetailsPage(),
+                  settings: RouteSettings(
+                    arguments: DetailsPageArguments(
+                      id: ListOffersMock.response['data']['viewer']['offers'][0]['id'],
+                      price: ListOffersMock.response['data']['viewer']['offers'][0]['price'],
+                      title: ListOffersMock.response['data']['viewer']['offers'][0]['product']['name'],
+                      description: ListOffersMock.response['data']['viewer']['offers'][0]['product']['description'],
+                      imageURL: ListOffersMock.response['data']['viewer']['offers'][0]['product']['image'],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+    expect(find.text("Ops!"), findsOneWidget);
+  });
 }

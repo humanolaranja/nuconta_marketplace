@@ -10,4 +10,16 @@ class BuyMock {
       }
     }
   };
+
+  static Map<String, dynamic> responseWithError = {
+    "data": {
+      "__typename": "MutationRoot",
+      "purchase": {
+        "__typename": "PurchaseMutationResponse",
+        "success": false,
+        "errorMessage": "error",
+        "customer": {"__typename": "Customer", "balance": 1000000}
+      }
+    }
+  };
 }
